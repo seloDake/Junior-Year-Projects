@@ -72,7 +72,7 @@ def solve_word_ladder(start, target, dictionary):
 
 # Main execution
 if __name__ == "__main__":
-    input_data = input()
+    #input_data = input()
     try:
         #file_path = , start_word, target_word = input_data.split()
         file_path = sys.argv[1]
