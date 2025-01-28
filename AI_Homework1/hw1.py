@@ -13,6 +13,7 @@ program alg
 
 # main files to import
 import string
+import sys
 
 # Load the dictionary and return as a set for fast lookup
 def load_dictionary(file_path):
@@ -73,7 +74,10 @@ def solve_word_ladder(start, target, dictionary):
 if __name__ == "__main__":
     input_data = input()
     try:
-        file_path, start_word, target_word = input_data.split()
+        #file_path = , start_word, target_word = input_data.split()
+        file_path = sys.argv[1]
+        start_word = sys.argv[2]
+        target_word = sys.argv[3]
         dictionary = load_dictionary(file_path)
 
         if dictionary is None:
@@ -88,6 +92,8 @@ if __name__ == "__main__":
         path = solve_word_ladder(start_word, target_word, dictionary)
         if path:
             print("\n".join(path))
+        else:
+            print("No Solution")
     except ValueError:
         print("Error: Invalid input format. Please provide 'dictionary_file start_word target_word'.")
 
