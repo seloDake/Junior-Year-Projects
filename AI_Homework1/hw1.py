@@ -67,7 +67,7 @@ def solve_word_ladder(start, target, dictionary):
             frontier.append(neighbor)
             parent_map[neighbor] = curr_wrd
 
-    print("No solution found.")
+    print("no solution")
     return []
 
 # Main execution
@@ -92,8 +92,6 @@ if __name__ == "__main__":
         path = solve_word_ladder(start_word, target_word, dictionary)
         if path:
             print("\n".join(path))
-        else:
-            print("No Solution")
     except ValueError:
         print("Error: Invalid input format. Please provide 'dictionary_file start_word target_word'.")
 
