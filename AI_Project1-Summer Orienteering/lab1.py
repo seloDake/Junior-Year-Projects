@@ -25,3 +25,25 @@ function to solve
       should look something like *terrain.png mpp.txt red.txt redOut.png*
 
 """
+
+def load_mapdict(f_path):
+    try:
+        elev_data = [] # open list for data points
+        with open(f_path, 'r') as elev:
+            for line in elev:
+                raw_data = line.split()
+                i = 0
+                while i <= len(raw_data) - 1:
+                    # ignore the last five entries of a line
+                    if i in (399, 398, 397, 396, 395):
+                        pass
+                    else:
+                        elev_data.append(raw_data[i])
+                    i+=1
+            print(len(elev_data))
+            return elev_data
+    except FileNotFoundError:
+        print(f"Error: File '{f_path}' not found.")
+        return None
+
+load_mapdict('AI_Project1-Summer Orienteering\mpp.txt')
