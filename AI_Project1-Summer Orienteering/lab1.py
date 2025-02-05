@@ -1,5 +1,6 @@
 """ This will be my main program file for my first AI lab. """
 import sys
+from PIL import Image, ImageDraw
 
 """ 
 Gameplan for program
@@ -26,6 +27,20 @@ function to solve
 
 """
 
+# Function to load in image
+def load_img(image):
+    img = Image.open(image)
+    
+    # size of the image
+    print(img.size)
+    # format of the image
+    print(img.format)
+    
+    img.show()
+
+load_img(r'AI_Project1-Summer Orienteering\terrain.png')
+
+# Function for loading elevation
 def load_mapdict(f_path):
     try:
         elev_data = [] # open list for data points
