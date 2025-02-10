@@ -1,5 +1,7 @@
 """ This will be my main program file for my first AI lab. """
 import sys
+import numpy as np
+import heapq
 from PIL import Image, ImageDraw
 
 """ 
@@ -27,16 +29,25 @@ function to solve
 
 """
 
+# Set terrain costs
+TERRAIN_SPEED = {
+    (248, 148, 18): 5.0,   # Open land
+    (255, 192, 0): 4.0,    # Rough meadow
+    (255, 255, 255): 3.5,  # Easy movement forest
+    (2, 208, 60): 3.0,     # Slow run forest
+    (2, 136, 40): 2.0,     # Walk forest
+    (5, 73, 24): 0.0,      # Impassable vegetation
+    (0, 0, 255): 0.0,      # Water
+    (71, 51, 3): 6.0,      # Paved road
+    (0, 0, 0): 5.5,        # Footpath
+    (205, 0, 101): 0.0     # Out of bounds
+}
+
 # Function to load in image
 def load_img(image):
     img = Image.open(image)
-    
-    # size of the image
-    print(img.size)
-    # format of the image
-    print(img.format)
-    
     img.show()
+    return img
 
 load_img(r'AI_Project1-Summer Orienteering\terrain.png')
 
