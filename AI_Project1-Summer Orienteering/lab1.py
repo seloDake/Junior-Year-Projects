@@ -97,4 +97,43 @@ def draw_path(image, path, output_path):
         draw.line([path[i], path[i + 1]], fill=(161, 70, 221), width=1)
     image.save(output_path)
 
+# implement A* search
+def as_search(start, goal, terrain, elevation):
+    # basics
+    lookat = []
+    heapq.heappush(lookat, (0, start))
+    history = {}
+    traveled = {start: 0}
+    cost_so_far = {start: 0}
 
+    while lookat:
+        _, curr = heapq.heappop(lookat)
+        if curr == goal:
+            break
+        
+        x, y = curr
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]:
+            neighbor = (x + dx, y + dy)
+            if 0 <= neighbor[0] < terrain.width and 0 <= neighbor[1] < terrain.height:
+                t_cost = get_terrain_cost(terrain, *neighbor)
+                if t_cost == 'inf':
+                    continue  # Skip impassable terrain
+                
+                distance = heuristic(curr, neighbor) + traveled[curr]
+                move_cost = heuristic(curr, neighbor) * t_cost
+                new_cost = cost_so_far[curr] + move_cost
+                if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                    cost_so_far[neighbor] = new_cost
+                    traveled[neighbor] = distance
+                    priority = new_cost + heuristic(goal, neighbor)
+                    heapq.heappush(lookat, (priority, neighbor))
+                    history[neighbor] = curr
+
+    path = []
+    current = goal
+    while current != start:
+        path.append(current)
+        current = history.get(current, start)
+    path.append(start)
+    path.reverse()
+    return path
