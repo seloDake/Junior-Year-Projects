@@ -77,9 +77,24 @@ def load_hitpoints(f_path):
             points.append((x, y))
     return points
 
+# get the terrain costs
+def get_terrain_cost(terrain, x, y):
+    color = terrain.getpixel((x, y))[:3]  # Get RGB
+    return TERRAIN_COSTS.get(color, 1.0)  # Default cost = 1.0 if unknown
+
+# Calculate my heuristic
+def heuristic(a, b, elev):
+    x1, y1 = a
+    x2, y2 = b
+    z1 = elev[y1, x1]
+    z2 = elev[y2, x2]
+    return np.sqrt(((x2 - x1)*10.29) ** 2 + ((y2 - y1)*7.55) ** 2 + (z2 - z1) ** 2)
+
 # path to draw output
 def draw_path(image, path, output_path):
     draw = ImageDraw.Draw(image)
     for i in range(len(path) - 1):
         draw.line([path[i], path[i + 1]], fill=(161, 70, 221), width=1)
     image.save(output_path)
+
+
