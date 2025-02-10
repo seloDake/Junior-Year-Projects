@@ -46,6 +46,7 @@ TERRAIN_COSTS = {
 # Function to load in image
 def load_img(image):
     img = Image.open(image)
+    img = img.convert('RGB')
     img.show()
     return img
 
@@ -59,8 +60,8 @@ def load_mapdict(f_path):
           for line in f:
             values = list(map(float, line.split()))
             elev_data.append(values[:395])  # Ignore last 5 values per line
-            print(len(elev_data))
-            return np.array(elev_data)
+            #print(len(elev_data))
+        return np.array(elev_data)
             #return elev_data
     except FileNotFoundError:
         print(f"Error: File '{f_path}' not found.")
@@ -120,12 +121,12 @@ def as_search(start, goal, terrain, elevation):
                     continue  # Skip impassable terrain
                 
                 #distance = heuristic(curr, neighbor) + traveled[curr]
-                move_cost = heuristic(curr, neighbor) * t_cost
+                move_cost = heuristic(curr, neighbor, elevation) * t_cost
                 new_cost = cost_so_far[curr] + move_cost
                 if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                     cost_so_far[neighbor] = new_cost
                     #traveled[neighbor] = distance
-                    priority = new_cost + heuristic(goal, neighbor)
+                    priority = new_cost + heuristic(goal, neighbor, elevation)
                     heapq.heappush(lookat, (priority, neighbor))
                     history[neighbor] = curr
 
@@ -146,11 +147,13 @@ def main():
     output_file = sys.argv[4]
 
     t_dist = 0
+    full_path = []
     for i in range(len(stops) - 1):
         path = as_search(stops[i], stops[i + 1], terrain_img, elev_data)
-        t_dist += sum(heuristic(path[j], path[j+1]) / get_terrain_cost(terrain_img, *path[j]) for j in range(len(path)-1))
-        draw_path(terrain_img, path, output_file)
-
+        full_path.extend(path)
+        t_dist += sum(heuristic(path[j], path[j+1], elev_data) / get_terrain_cost(terrain_img, *path[j]) for j in range(len(path)-1))
+    
+    draw_path(terrain_img, path, output_file)
     print(t_dist)
     
 if __name__ == "__main__":
