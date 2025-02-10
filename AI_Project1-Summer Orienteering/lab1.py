@@ -37,7 +37,7 @@ TERRAIN_COSTS = {
     (2, 208, 60): 2.0,     # Slow run forest
     (2, 136, 40): 2.5,     # Walk forest
     (5, 73, 24): float('inf'),  # Impassable vegetation
-    (0, 0, 255): float('inf'),  # Water
+    (0, 0, 255): 2.7,  # Water
     (71, 51, 3): 0.8,      # Paved road
     (0, 0, 0): 0.9,        # Footpath
     (205, 0, 101): float('inf') # Out of bounds
