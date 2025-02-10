@@ -54,22 +54,27 @@ load_img(r'AI_Project1-Summer Orienteering\terrain.png')
 # Function for loading elevation
 def load_mapdict(f_path):
     try:
-        elev_data = [] # open list for data points
-        with open(f_path, 'r') as elev:
-            for line in elev:
-                raw_data = line.split()
-                i = 0
-                while i <= len(raw_data) - 1:
-                    # ignore the last five entries of a line
-                    if i in (399, 398, 397, 396, 395):
-                        pass
-                    else:
-                        elev_data.append(raw_data[i])
-                    i+=1
+        elev_data = []
+        with open(f_path, 'r') as f:
+          for line in f:
+            values = list(map(float, line.split()))
+            elev_data.append(values[:395])  # Ignore last 5 values per line
             print(len(elev_data))
-            return elev_data
+            return np.array(elev_data)
+            #return elev_data
     except FileNotFoundError:
         print(f"Error: File '{f_path}' not found.")
         return None
+    
+#load_mapdict('AI_Project1-Summer Orienteering\mpp.txt')
 
-load_mapdict('AI_Project1-Summer Orienteering\mpp.txt')
+# load the path to follow
+def load_hitpoints(f_path):
+    points = []
+    with open(f_path, 'r') as f:
+        for line in f:
+            x, y = map(int, line.split())
+            points.append((x, y))
+    return points
+
+# path to draw output
