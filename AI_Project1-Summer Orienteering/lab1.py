@@ -49,7 +49,7 @@ def load_img(image):
     img.show()
     return img
 
-load_img(r'AI_Project1-Summer Orienteering\terrain.png')
+#load_img(r'AI_Project1-Summer Orienteering\terrain.png')
 
 # Function for loading elevation
 def load_mapdict(f_path):
@@ -103,7 +103,7 @@ def as_search(start, goal, terrain, elevation):
     lookat = []
     heapq.heappush(lookat, (0, start))
     history = {}
-    traveled = {start: 0}
+    #traveled = {start: 0}
     cost_so_far = {start: 0}
 
     while lookat:
@@ -119,12 +119,12 @@ def as_search(start, goal, terrain, elevation):
                 if t_cost == 'inf':
                     continue  # Skip impassable terrain
                 
-                distance = heuristic(curr, neighbor) + traveled[curr]
+                #distance = heuristic(curr, neighbor) + traveled[curr]
                 move_cost = heuristic(curr, neighbor) * t_cost
                 new_cost = cost_so_far[curr] + move_cost
                 if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                     cost_so_far[neighbor] = new_cost
-                    traveled[neighbor] = distance
+                    #traveled[neighbor] = distance
                     priority = new_cost + heuristic(goal, neighbor)
                     heapq.heappush(lookat, (priority, neighbor))
                     history[neighbor] = curr
@@ -137,3 +137,21 @@ def as_search(start, goal, terrain, elevation):
     path.append(start)
     path.reverse()
     return path
+
+# main function
+def main():
+    terrain_img = load_img(sys.argv[1])
+    elev_data = load_mapdict(sys.argv[2])
+    stops = load_hitpoints(sys.argv[3])
+    output_file = sys.argv[4]
+
+    t_dist = 0
+    for i in range(len(stops) - 1):
+        path = as_search(stops[i], stops[i + 1], terrain_img, elev_data)
+        t_dist += sum(heuristic(path[j], path[j+1]) / get_terrain_cost(terrain_img, *path[j]) for j in range(len(path)-1))
+        draw_path(terrain_img, path, output_file)
+
+    print(t_dist)
+    
+if __name__ == "__main__":
+    main()
