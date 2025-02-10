@@ -30,17 +30,17 @@ function to solve
 """
 
 # Set terrain costs
-TERRAIN_SPEED = {
-    (248, 148, 18): 5.0,   # Open land
-    (255, 192, 0): 4.0,    # Rough meadow
-    (255, 255, 255): 3.5,  # Easy movement forest
-    (2, 208, 60): 3.0,     # Slow run forest
-    (2, 136, 40): 2.0,     # Walk forest
-    (5, 73, 24): 0.0,      # Impassable vegetation
-    (0, 0, 255): 0.0,      # Water
-    (71, 51, 3): 6.0,      # Paved road
-    (0, 0, 0): 5.5,        # Footpath
-    (205, 0, 101): 0.0     # Out of bounds
+TERRAIN_COSTS = {
+    (248, 148, 18): 1.0,   # Open land
+    (255, 192, 0): 1.2,    # Rough meadow
+    (255, 255, 255): 1.5,  # Easy movement forest
+    (2, 208, 60): 2.0,     # Slow run forest
+    (2, 136, 40): 2.5,     # Walk forest
+    (5, 73, 24): float('inf'),  # Impassable vegetation
+    (0, 0, 255): float('inf'),  # Water
+    (71, 51, 3): 0.8,      # Paved road
+    (0, 0, 0): 0.9,        # Footpath
+    (205, 0, 101): float('inf') # Out of bounds
 }
 
 # Function to load in image
@@ -78,3 +78,8 @@ def load_hitpoints(f_path):
     return points
 
 # path to draw output
+def draw_path(image, path, output_path):
+    draw = ImageDraw.Draw(image)
+    for i in range(len(path) - 1):
+        draw.line([path[i], path[i + 1]], fill=(161, 70, 221), width=1)
+    image.save(output_path)
