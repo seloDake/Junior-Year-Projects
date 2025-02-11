@@ -35,9 +35,9 @@ TERRAIN_COSTS = {
     (255, 192, 0): 1.2,    # Rough meadow
     (255, 255, 255): 1.5,  # Easy movement forest
     (2, 208, 60): 2.0,     # Slow run forest
-    (2, 136, 40): 2.5,     # Walk forest
+    (2, 136, 40): 3.5,     # Walk forest
     (5, 73, 24): float('inf'),  # Impassable vegetation
-    (0, 0, 255): 2.7,  # Water
+    (0, 0, 255): 7,  # Water
     (71, 51, 3): 0.8,      # Paved road
     (0, 0, 0): 0.9,        # Footpath
     (205, 0, 101): float('inf') # Out of bounds
@@ -104,7 +104,7 @@ def as_search(start, goal, terrain, elevation):
     lookat = []
     heapq.heappush(lookat, (0, start))
     history = {}
-    #traveled = {start: 0}
+    traveled = {start: 0}
     cost_so_far = {start: 0}
 
     while lookat:
@@ -151,10 +151,11 @@ def main():
     for i in range(len(stops) - 1):
         path = as_search(stops[i], stops[i + 1], terrain_img, elev_data)
         full_path.extend(path)
-        t_dist += sum(heuristic(path[j], path[j+1], elev_data) / get_terrain_cost(terrain_img, *path[j]) for j in range(len(path)-1))
+        t_dist += sum(heuristic(path[j], path[j+1], elev_data) for j in range(len(path)-1))# / get_terrain_cost(terrain_img, *path[j])
     
-    draw_path(terrain_img, path, output_file)
+    draw_path(terrain_img, full_path, output_file)
     print(t_dist)
+    #print(full_path)
     
 if __name__ == "__main__":
     main()
