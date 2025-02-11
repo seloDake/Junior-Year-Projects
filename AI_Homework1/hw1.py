@@ -13,6 +13,7 @@ program alg
 
 # main files to import
 import string
+import sys
 
 # Load the dictionary and return as a set for fast lookup
 def load_dictionary(file_path):
@@ -66,14 +67,17 @@ def solve_word_ladder(start, target, dictionary):
             frontier.append(neighbor)
             parent_map[neighbor] = curr_wrd
 
-    print("No solution found.")
+    print("no solution")
     return []
 
 # Main execution
 if __name__ == "__main__":
-    input_data = input()
+    #input_data = input()
     try:
-        file_path, start_word, target_word = input_data.split()
+        #file_path = , start_word, target_word = input_data.split()
+        file_path = sys.argv[1]
+        start_word = sys.argv[2]
+        target_word = sys.argv[3]
         dictionary = load_dictionary(file_path)
 
         if dictionary is None:
