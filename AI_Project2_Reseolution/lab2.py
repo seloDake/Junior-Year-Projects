@@ -27,3 +27,12 @@ sys entry: python3 lab2.py testcases/functions/f1.cnf
 output: yes | no
 
 """
+
+def cnf_parser(f_name):
+    ...
+
+def cl_parser(line):
+    ...
+
+def pred_parser(lit):
+    ...
