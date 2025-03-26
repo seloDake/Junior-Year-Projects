@@ -54,26 +54,38 @@ def cnf_parser(f_name):
                 functs.update(line.split(":")[1].split())
             elif line.startswith("Clauses:"):
                 section = "clauses"
-            #elif section == "clauses":
-                #clauses.append(cl_parser(line))
-    print(preds)
-    print(variables)
-    print(consts)
-    print(functs)
+            elif section == "clauses":
+                clauses.append(cl_parser(line))
+    #print(preds)
+    #print(variables)
+    #print(consts)
+    #print(functs)
+    print(clauses)
     return preds, variables, consts, functs, clauses
 
 
 def cl_parser(line):
     # Will parse the individual lines in order tomake clauses
-    ...
+    lits = line.split()
+    p_lits = [] # set of my parsed literals after being processed
+    for lit in lits:
+        negated = lit.startswith("!")
+        if negated:
+            lit = lit[1:] #gotta get rid of the !
+        preds, args = pred_parser(lit)
+        p_lits.append((negated, preds, tuple(args)))
+    return set(p_lits)
 
 def pred_parser(lit):
     # Seperates the pred name and its args(returns both)
-    ...
+    name, args = lit.split("(")
+    args = args[:-1].split(",")  # delete ')' & ','
+    return name, args
 
 def main():
     # used to test and finally run this code.
-    cnf_parser(sys.argv[1])    
+    cnf_file = sys.argv[1]
+    cnf_parser(cnf_file)    
 
 
 if __name__ == "__main__":
