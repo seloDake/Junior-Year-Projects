@@ -85,7 +85,16 @@ def pred_parser(lit):
     # Seperates the pred name and its args(returns both)
     name, args = lit.split("(")
     args = args[:-1].split(",")  # delete ')' & ','
-    return name, args
+    p_args = [fun_parser(arg) for arg in args]
+    return name, p_args
+
+def fun_parser(term):
+    # parses the function into tuple so it can be hashed
+    if "(" in term and term.endswith(")"):
+        name, args = lit.split("(")
+        args = args[:-1].split(",")  # delete ')' & ','
+        return (name, tuple(args)) # store the functions (name,(arg1, asg2,...))
+    return term
 
 """
 Unify codes
