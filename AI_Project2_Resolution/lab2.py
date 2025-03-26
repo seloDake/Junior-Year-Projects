@@ -29,7 +29,7 @@ output: yes | no
 """
 
 """
-Resolvers
+parselyssss
 """
 
 
@@ -154,6 +154,18 @@ def var_check(term):
     # is it a var? Return bool
     return term.islower()
 
+"""
+Resolverss
+"""
+
+def resolve():
+    ...
+
+def ap_subs():
+    ...
+
+def res_loop():
+    ...
 
 def main():
     # used to test and finally run this code.
