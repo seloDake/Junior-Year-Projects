@@ -23,7 +23,7 @@ Unification function
     -How do you create a new free variable to prevent name conflicts?
     -How will you apply the substitutions to predicates and functions?
 
-sys entry: python3 lab2.py testcases/functions/f1.cnf
+sys entry: python3 AI_Project2_Resolution\lab2.py AI_Project2_Resolution/truck.cnf
 output: yes | no
 
 """
@@ -73,7 +73,7 @@ def pred_parser(lit):
 
 def main():
     # used to test and finally run this code.
-    cnf_parser(sys.argv[0])    
+    cnf_parser(sys.argv[1])    
 
 
 if __name__ == "__main__":
