@@ -64,7 +64,7 @@ def cnf_parser(f_name):
     # print(preds)
     # print(variables)
     # print(consts)
-    # print(functs)
+    print(functs)
     # print(clauses)
     return preds, variables, consts, functs, clauses
 
@@ -83,15 +83,19 @@ def cl_parser(line):
 
 def pred_parser(lit):
     # Seperates the pred name and its args(returns both)
-    name, args = lit.split("(")
-    args = args[:-1].split(",")  # delete ')' & ','
-    p_args = [fun_parser(arg) for arg in args]
-    return name, p_args
+    #print(lit)
+    if "(" in lit and lit.endswith(")"):
+        name, args = lit.split("(", 1)  # Split only at the first "("
+        args = args[:-1].split(",")  # Remove closing parenthesis and split args
+        p_args = [fun_parser(arg) for arg in args]
+        return name, p_args
+    else:
+        return lit, () # aka. empty
 
 def fun_parser(term):
     # parses the function into tuple so it can be hashed
     if "(" in term and term.endswith(")"):
-        name, args = lit.split("(")
+        name, args = term.split("(")
         args = args[:-1].split(",")  # delete ')' & ','
         return (name, tuple(args)) # store the functions (name,(arg1, asg2,...))
     return term
@@ -115,6 +119,14 @@ def unify(term1, term2, subs):
         return univar(term1, term2, subs)
     if var_check(term2):
         return univar(term2, term1, subs)
+    if isinstance(term1,tuple) and isinstance(term2,tuple): # check function terms
+        if term1[0] != term2[0] or len(term1[1]) != len(term2[1]):
+            return None
+        for t1,t2 in zip(term1[1], term2[1]):
+            subs = unify(t1, t2, subs)
+            if subs is None:
+                return None
+        return subs
     return None
 
 def univar(var, term, subs):
@@ -132,6 +144,10 @@ def seen(var, term, subs):
     # check if seen alr to avoid loops. Return Bool
     if var == term:
         return True
+    if term in subs:
+        return seen(var, subs[term], subs)
+    if isinstance(term, tuple):
+        return any(seen(var, s_term, subs) for s_term in term[1])
     return False
 
 def var_check(term):
