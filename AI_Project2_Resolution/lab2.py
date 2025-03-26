@@ -100,20 +100,34 @@ def unify(term1, term2, subs):
     begin to process the whole term with subsitution
     if sub works return the sub, else NOne
     """
-    ...
+    if term1 == term2:
+        return subs
+    if var_check(term1):
+        return univar(term1, term2, subs)
+    if var_check(term2):
+        return univar(term2, term1, subs)
+    return None
 
 def univar(var, term, subs):
     # unify the vars if necessary. Return updated var, if any
-    ...
+    if var in subs:
+        return unify(subs[var], term, subs)
+    if term in subs:
+        return unify(var, subs[term], subs)
+    if seen(var, term, subs):
+        return None  # Prevent infinite loops
+    subs[var] = term
+    return subs
 
 def seen(var, term, subs):
     # check if seen alr to avoid loops. Return Bool
-    ...
+    if var == term:
+        return True
+    return False
 
 def var_check(term):
     # is it a var? Return bool
-    ...
-
+    return term.islower()
 
 
 def main():
