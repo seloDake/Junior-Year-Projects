@@ -64,7 +64,7 @@ def cnf_parser(f_name):
     # print(preds)
     # print(variables)
     # print(consts)
-    print(functs)
+    # print(functs)
     # print(clauses)
     return preds, variables, consts, functs, clauses
 
@@ -147,12 +147,14 @@ def seen(var, term, subs):
     if term in subs:
         return seen(var, subs[term], subs)
     if isinstance(term, tuple):
-        return any(seen(var, s_term, subs) for s_term in term[1])
+        # Check all subterms in the function's arguments
+        return any(seen(var, st, subs) for st in term[1])
     return False
 
 def var_check(term):
     # is it a var? Return bool
-    return term.islower()
+    #print(term)
+    return isinstance(term, str) and len(term) > 0 and term[0].islower()
 
 """
 Resolverss
@@ -176,19 +178,49 @@ def ap_subs(cl, subs):
     # makes the subs for a clause
     ncl = set()
     for neg, pred, args in cl:
-        new_args = [subs.get(arg, arg) for arg in args]
-        ncl.add((neg, pred, tuple(new_args)))
+        # Apply substitution recursively to all terms in args
+        new_args = tuple([sub_term(arg, subs) for arg in args])
+        ncl.add((neg, pred, new_args))
     return ncl
 
-def res_loop():
+def sub_term(term, subs):
+    if isinstance(term, tuple):
+        # Recursively substitute in function arguments
+        return (term[0], tuple(sub_term(arg, subs) for arg in term[1]))
+    else:
+        return subs.get(term, term)
+
+def res_loop(cl):
     # runs the code to check yes or no!!
-    ...
+    new_cl = set(frozenset(c) for c in cl)
+    while True:
+        new_pairs = list(itertools.combinations(new_cl, 2))
+        new_res = set()
+        for cl1, cl2 in new_pairs:
+            res = resolve(cl1, cl2)
+            if res is not None:
+                if not res:
+                    return "no"
+                new_res.add(frozenset(res))
+        if new_res.issubset(new_cl):
+            print(res)
+            return "yes"
+        new_cl.update(new_res)
 
 def main():
     # used to test and finally run this code.
     cnf_file = sys.argv[1]
-    cnf_parser(cnf_file)    
+    # list the diff things from parser
+    preds = cnf_parser(cnf_file)[0]
+    variables = cnf_parser(cnf_file)[1]
+    consts = cnf_parser(cnf_file)[2]
+    funs = cnf_parser(cnf_file)[3]
+    cl = cnf_parser(cnf_file)[4]
+    #print(cl)    
 
+    # solve
+    result = res_loop(cl)
+    print(result)
 
 if __name__ == "__main__":
     main()
