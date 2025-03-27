@@ -158,13 +158,30 @@ def var_check(term):
 Resolverss
 """
 
-def resolve():
-    ...
+def resolve(cl1, cl2):
+    #resolve two clauses with similar lits
+    for lit1 in cl1:
+        for lit2 in cl2:
+            neg1, pred1, args1 = lit1
+            neg2, pred2, args2 = lit2
+            if pred1 == pred2 and neg1 != neg2:
+                subs = unify(args1, args2, {})
+                if subs is not None:
+                    ncl = (cl1 - {lit1}) | (cl2 - {lit2})
+                    ncl = ap_subs(ncl, subs)
+                    return ncl if ncl else set()
+    return None
 
-def ap_subs():
-    ...
+def ap_subs(cl, subs):
+    # makes the subs for a clause
+    ncl = set()
+    for neg, pred, args in cl:
+        new_args = [subs.get(arg, arg) for arg in args]
+        ncl.add((neg, pred, tuple(new_args)))
+    return ncl
 
 def res_loop():
+    # runs the code to check yes or no!!
     ...
 
 def main():
