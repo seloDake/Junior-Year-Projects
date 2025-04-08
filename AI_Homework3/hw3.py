@@ -10,10 +10,20 @@ def reader(d_file):
         for line in f:
             sects = line.strip().split()
             attributes = sects[:-1]
-            label = sects[-1]
+            AoB = sects[-1]
             #update the data for the code as booleans
-            data.append((list(map(lambda x: x == "True", attributes)), label))
+            data.append((list(map(lambda x: x == "True", attributes)), AoB))
    return data
 
-def main():
+"""Check to see what to strata on"""
+def checker(data):
     ...
+
+def main():
+    d_file = sys.argv[1]
+    rdata = reader(d_file)
+    #print(rdata[1][0][1])
+    ...
+
+if __name__ == "__main__":
+    main()
