@@ -3,6 +3,7 @@ import sys
 import math
 from collections import Counter, defaultdict
 
+"""python AI_Homework3\hw3.py AI_Homework3\dtree-data.dat.txt"""
 """ Read the data file and parse the info """
 def reader(d_file):
    data = []
