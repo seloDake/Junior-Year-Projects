@@ -59,7 +59,7 @@ def save_to_file(english_segments, dutch_segments, filename='train.dat'):
         for segment in dutch_segments:
             file.write(f"nl | {segment}\n")
 
-
+# Print collected data
 print("English Segments:")
 for segment in english_segments:
     print(segment)
@@ -72,5 +72,5 @@ for segment in dutch_segments:
 save_to_file(english_segments, dutch_segments)
 
 print("Training data saved to 'train.dat'")
-# Print collected data
+
 
