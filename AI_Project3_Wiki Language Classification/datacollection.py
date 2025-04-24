@@ -50,7 +50,7 @@ dutch_segments = collect_data(language='nl', num_samples=10)
 
 # Save data to a file in the required format
 def save_to_file(english_segments, dutch_segments, filename='train.dat'):
-    with open(filename, 'w') as file:
+    with open(filename, 'w', encoding='utf-8') as file:
         # Save English segments with "en" label
         for segment in english_segments:
             file.write(f"en | {segment}\n")
